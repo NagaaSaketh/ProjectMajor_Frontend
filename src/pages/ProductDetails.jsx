@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useCartContext from "../contexts/CartContext";
 import useWishListContext from "../contexts/WishListContext";
 import "react-toastify/dist/ReactToastify.css";
-// import { Slide, toast } from "react-toastify";
+import { Slide, toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 
 const ProductDetails = () => {

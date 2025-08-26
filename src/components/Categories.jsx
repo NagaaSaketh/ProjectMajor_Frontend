@@ -14,8 +14,8 @@ const Categories = () => {
         ) : data && data.length > 0 ? (
           <div className="row">
             {data.map((category) => (
-              <div className="col-lg-4 col-md-6 col-sm-12 mt-4">
-                <div className="card">
+              <div className="col-lg-4 col-md-6 col-sm-12 mt-4" key={category._id}>
+                <div className="card" >
                   <div className="d-flex justify-content-around">
                     <img
                       style={{
