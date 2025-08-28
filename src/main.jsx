@@ -9,7 +9,7 @@ import Cart from "./pages/Cart.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
 import WishList from "./pages/WishList.jsx";
 import { WishListProvider } from "./contexts/WishListContext.jsx";
-
+import Login from "./pages/Login.jsx";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
@@ -20,6 +20,7 @@ const router = createBrowserRouter([
   { path: "/products/:productId", element: <ProductDetails /> },
   { path: "/cart", element: <Cart /> },
   { path: "/wishlist", element: <WishList /> },
+  {path:"/login",element:<Login/>}
 ]);
 
 root.render(

@@ -2,9 +2,12 @@ import Header from "../components/Header";
 import useWishListContext from "../contexts/WishListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer } from "react-toastify";
+import { Slide } from "react-toastify";
+
 const WishList = () => {
-  const { wishList } = useWishListContext();
-  console.log(wishList);
+  const { wishList,handleMoveToCartFromWishList} = useWishListContext();
+ 
 
   return (
     <>
@@ -17,10 +20,10 @@ const WishList = () => {
           <hr />
         </div>
         <div className="row g-4">
-          {wishList && wishList.length > 0 ? (
+          {Array.isArray(wishList) && wishList.length > 0 ? (
             wishList.map((item) => {
               return (
-                <div key={item.productId} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div key={item._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
                   <div className="card">
                     <div className="position-relative">
                       <img
@@ -40,7 +43,9 @@ const WishList = () => {
                     <div className="card-body d-flex flex-column justify-content-between text-center py-2">
                       <p className="fw-bold">{item.productName}</p>
                       <p className="fw-bold">Rs.{item.productPrice}</p>
+                      {/* <p className="fw-bold">{item.size}</p> */}
                       <button
+                      onClick={()=>handleMoveToCartFromWishList(item)}
                         style={{ fontFamily: "CopperPlate" }}
                         className="btn btn-outline-dark"
                       >
@@ -56,6 +61,19 @@ const WishList = () => {
           )}
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
     </>
   );
 };

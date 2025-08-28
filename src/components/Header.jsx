@@ -46,12 +46,12 @@ const Header = () => {
             </div>
           </div>
           <div className="col-md-3 d-flex align-items-center justify-content-end">
-            <button
+            <Link to = "/login"
               className="btn btn-secondary me-3"
               style={{ borderRadius: "1px", width: "100px" }}
             >
               Login
-            </button>
+            </Link>
 
             <div className="d-flex align-items-center gap-3">
               <Link to="/wishlist">

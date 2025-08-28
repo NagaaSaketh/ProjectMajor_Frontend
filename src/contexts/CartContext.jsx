@@ -30,8 +30,9 @@ export const CartProvider = ({ children }) => {
     }
     const existingProduct = cart.find(
       (product) =>
-        product.productId === productData._id && product.size === size
+        product.productId === productData.productId && product.size === size
     );
+
     if (existingProduct) {
       toast.info("This item & size is already in your cart.");
       return;
@@ -60,7 +61,7 @@ export const CartProvider = ({ children }) => {
       }
       const data = await response.json();
       console.log("Added item:", data);
-      setCart([...cart, { ...productData, quantity: quantity, size: size }]);
+      setCart([...cart, data.cartItem]);
       toast.success("Item added to cart successfully!");
     } catch (err) {
       console.log(err);
@@ -74,9 +75,57 @@ export const CartProvider = ({ children }) => {
     setQuantity((quantity) => (quantity > 1 ? quantity - 1 : 1));
   };
 
+  const handleMoveToWishListFromCart = async(product)=>{
+    try {
+      const response = await fetch("http://localhost:3000/wishlist/items/products");
+      const wishListData = await response.json();
+      const wishList = wishListData.wishlistItems || [];
+
+      const existingProduct = wishList.find((item) =>item.productId === product.productId);
+
+      if (existingProduct) {
+        toast.info("This Item is already in your wishlist.");
+      } else {
+        const wishListItem = {
+          productId: product.productId,
+          productName: product.productName,
+          productImage: product.productImage,
+          productPrice: product.productPrice,
+          actualPrice: product.actualPrice,
+          quantity: 1,
+          size: product.size,
+        };
+
+        const addResponse = await fetch("http://localhost:3000/wishlistItems", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(wishListItem),
+        });
+
+        if (!addResponse.ok) {
+          throw "Failed to add item into wishlist.";
+        }
+
+        toast.success("Item moved to wishlist successfully!");
+      }
+
+      await deleteItem(product._id);
+
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to move item to wishlist.");
+    }
+  };
+
+  
+  
+
+
   async function deleteItem(itemId) {
     try {
-      console.log("Deleting item with ID:", itemId);
+      // console.log("Deleting item with ID:", itemId);
       const response = await fetch(`http://localhost:3000/items/${itemId}`, {
         method: "DELETE",
         headers: {
@@ -84,12 +133,15 @@ export const CartProvider = ({ children }) => {
         },
       });
       if (!response.ok) {
-        throw "Failed to delete an item from cart.";
+        const errorText = await response.text();
+        throw new Error(`Failed to delete item: ${errorText}`);
       }
 
       const data = await response.json();
       console.log("Item Deleted:", data);
+
       setCart((cart) => cart.filter((item) => item._id !== itemId));
+
       toast.success("Item deleted successfully.");
     } catch (err) {
       console.log(err);
@@ -108,6 +160,7 @@ export const CartProvider = ({ children }) => {
         decreaseQuantity,
         quantity,
         deleteItem,
+        handleMoveToWishListFromCart
       }}
     >
       {children}

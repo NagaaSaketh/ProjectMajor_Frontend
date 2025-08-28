@@ -2,12 +2,13 @@ import Header from "../components/Header";
 import useCartContext from "../contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-// import { Link } from "react-router-dom";
+import { Slide } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const Cart = () => {
-  const { cart, quantity, increaseQuantity, decreaseQuantity , deleteItem } =
+  const { cart, quantity, increaseQuantity, decreaseQuantity , deleteItem , handleMoveToWishListFromCart } =
     useCartContext();
+
 
   const totalPrice = cart?.reduce((acc, curr) => acc + curr.productPrice, 0);
 //   console.log(totalPrice);
@@ -81,7 +82,7 @@ const Cart = () => {
                               <input
                                 type="text"
                                 className="form-control text-center mx-2"
-                                value={quantity}
+                                value={item.quantity}
                                 style={{ width: "45px" }}
                                 readOnly
                               />
@@ -96,7 +97,7 @@ const Cart = () => {
                           </div>
 
                           <div className="d-flex gap-3 mt-4">
-                            <button style={{fontFamily:"CopperPlate"}}  className="btn btn-outline-dark">
+                            <button onClick={()=>handleMoveToWishListFromCart(item)} style={{fontFamily:"CopperPlate"}}  className="btn btn-outline-dark">
                               Move to Wishlist
                             </button>
                             <button onClick={()=>deleteItem(item._id)} style={{background:"none",border:"none"}} >
@@ -145,6 +146,19 @@ const Cart = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
     </>
   );
 };

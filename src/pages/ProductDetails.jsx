@@ -78,7 +78,7 @@ const ProductDetails = () => {
                     Add to Cart
                   </button>
                   <button
-                    onClick={() => handleAddToWishList(data)}
+                    onClick={() => handleAddToWishList(data,size)}
                     style={{
                       borderRadius: "1%",
                       width: "100%",
