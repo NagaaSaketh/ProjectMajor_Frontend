@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     async function getCartItems() {
-      const res = await fetch("http://localhost:3000/cart/items");
+      const res = await fetch("https://major-project1-backend-ten.vercel.app/cart/items");
       const jsonData = await res.json();
       // console.log(jsonData);
       if (jsonData) {
@@ -49,7 +49,7 @@ export const CartProvider = ({ children }) => {
         size: size,
       };
 
-      const response = await fetch("http://localhost:3000/cart", {
+      const response = await fetch("https://major-project1-backend-ten.vercel.app/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export const CartProvider = ({ children }) => {
 
   const handleMoveToWishListFromCart = async(product)=>{
     try {
-      const response = await fetch("http://localhost:3000/wishlist/items/products");
+      const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlist/items/products");
       const wishListData = await response.json();
       const wishList = wishListData.wishlistItems || [];
 
@@ -96,7 +96,7 @@ export const CartProvider = ({ children }) => {
           size: product.size,
         };
 
-        const addResponse = await fetch("http://localhost:3000/wishlistItems", {
+        const addResponse = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -126,7 +126,7 @@ export const CartProvider = ({ children }) => {
   async function deleteItem(itemId) {
     try {
       // console.log("Deleting item with ID:", itemId);
-      const response = await fetch(`http://localhost:3000/items/${itemId}`, {
+      const response = await fetch(`https://major-project1-backend-ten.vercel.app/items/${itemId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

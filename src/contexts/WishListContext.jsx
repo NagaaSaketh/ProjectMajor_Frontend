@@ -10,7 +10,7 @@ export const WishListProvider = ({ children }) => {
 
   useEffect(() => {
     async function getWishListItems() {
-      const res = await fetch("http://localhost:3000/wishlist/items/products");
+      const res = await fetch("https://major-project1-backend-ten.vercel.app/wishlist/items/products");
       const jsonData = await res.json();
       console.log(jsonData);
       if (jsonData) {
@@ -42,7 +42,7 @@ export const WishListProvider = ({ children }) => {
         size: size,
       };
 
-      const response = await fetch("http://localhost:3000/wishlistItems", {
+      const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const WishListProvider = ({ children }) => {
     // console.log(product);
 
     try {
-      const response = await fetch("http://localhost:3000/cart/items");
+      const response = await fetch("https://major-project1-backend-ten.vercel.app/cart/items");
       const cartData = await response.json();
       const cart = cartData.products || [];
 
@@ -78,7 +78,7 @@ export const WishListProvider = ({ children }) => {
       if (existingProduct) {
         const updatedQuantity = existingProduct.quantity + 1;
         const updateResponse = await fetch(
-          `http://localhost:3000/cart/items/${existingProduct._id}`,
+          `https://major-project1-backend-ten.vercel.app/cart/items/${existingProduct._id}`,
           {
             method: "PUT",
             headers: {
@@ -103,7 +103,7 @@ export const WishListProvider = ({ children }) => {
           size: product.size,
         };
 
-        const addResponse = await fetch("http://localhost:3000/cart", {
+        const addResponse = await fetch("https://major-project1-backend-ten.vercel.app/cart", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -129,7 +129,7 @@ export const WishListProvider = ({ children }) => {
   const removeFromWishlist = async (itemId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/wishlist/items/${itemId}`,
+        `https://major-project1-backend-ten.vercel.app/wishlist/items/${itemId}`,
         {
           method: "DELETE",
           headers: {
