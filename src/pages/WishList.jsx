@@ -1,64 +1,74 @@
 import Header from "../components/Header";
 import useWishListContext from "../contexts/WishListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { ToastContainer } from "react-toastify";
-import { Slide } from "react-toastify";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, Slide } from "react-toastify";
 
 const WishList = () => {
-  const { wishList,handleMoveToCartFromWishList} = useWishListContext();
- 
+  const { wishList, handleMoveToCartFromWishList, removeFromWishlist } =
+    useWishListContext();
+
+  // console.log(wishList);
 
   return (
     <>
       <Header />
-      <div className="container">
-        <div className="text-center py-2">
-          <h2 style={{ fontFamily: "CopperPlate" }}>
-            MY WISHLIST ({wishList.length}){" "}
-          </h2>
-          <hr />
-        </div>
-        <div className="row g-4">
-          {Array.isArray(wishList) && wishList.length > 0 ? (
-            wishList.map((item) => {
-              return (
-                <div key={item._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                  <div className="card">
-                    <div className="position-relative">
-                      <img
-                      
-                      style={{ maxHeight:"250px",width:"100%", objectFit: "cover" }}
-                        className="img-fluid "
-                        src={item.productImage}
-                        alt={item.productName}
-                      />
-                      <FontAwesomeIcon
-                        icon={faHeart}
-                        className="text-danger position-absolute top-0 end-0 p-2"
-                        style={{ fontSize: "18px", cursor: "pointer" }}
-                        title="Wishlist"
-                      />
-                    </div>
-                    <div className="card-body d-flex flex-column justify-content-between text-center py-2">
-                      <p className="fw-bold">{item.productName}</p>
-                      <p className="fw-bold">Rs.{item.productPrice}</p>
-                      {/* <p className="fw-bold">{item.size}</p> */}
-                      <button
-                      onClick={()=>handleMoveToCartFromWishList(item)}
-                        style={{ fontFamily: "CopperPlate" }}
-                        className="btn btn-outline-dark"
-                      >
-                        Move to Cart
-                      </button>
+      <div className="bg-light">
+        <div className="container">
+          <div className="text-center py-4">
+            <h2 style={{ fontFamily: "CopperPlate" }}>
+              MY WISHLIST ({wishList.length}){" "}
+            </h2>
+            <hr />
+          </div>
+          <div className="row g-4">
+            {Array.isArray(wishList) && wishList.length > 0 ? (
+              wishList.map((item) => {
+                return (
+                  <div
+                    key={item._id}
+                    className="col-12 col-sm-6 col-md-4 col-lg-3"
+                  >
+                    <div className="card mb-3">
+                      <div className="position-relative">
+                        <img
+                          style={{
+                            maxHeight: "250px",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
+                          className="img-fluid "
+                          src={item.productImage}
+                          alt={item.productName}
+                        />
+                      </div>
+                      <div className="card-body d-flex flex-column justify-content-between text-center py-2">
+                        <p className="fw-bold">{item.productName}</p>
+                        <p className="fw-bold">Rs.{item.productPrice}</p>
+                        <div className="d-flex justify-content-evenly">
+                          <button
+                            onClick={() => handleMoveToCartFromWishList(item)}
+                            style={{ fontFamily: "CopperPlate" }}
+                            className="btn btn-outline-dark"
+                          >
+                            Move to Cart
+                          </button>
+                          <button
+                            onClick={() => removeFromWishlist(item._id)}
+                            className="btn"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
-          ) : (
-            <p className="text-center mt-4">Your Wishlist is empty</p>
-          )}
+                );
+              })
+            ) : (
+              <p className="text-center mt-4">Your Wishlist is empty</p>
+            )}
+          </div>
         </div>
       </div>
       <ToastContainer

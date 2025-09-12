@@ -9,7 +9,14 @@ import Cart from "./pages/Cart.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
 import WishList from "./pages/WishList.jsx";
 import { WishListProvider } from "./contexts/WishListContext.jsx";
-import Login from "./pages/Login.jsx";
+import Profile from "./pages/Profile.jsx";
+import { UserProvider } from "./contexts/UserContext.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import LoginForm from "./pages/LoginForm.jsx";
+import Orders from "./components/Orders.jsx";
+import { AddressProvider } from "./contexts/AddressesContext.jsx";
+import { SearchProvider } from "./contexts/SearchContext.jsx";
+import { RecommendationProvider } from "./contexts/RecommendationContext.jsx";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
@@ -20,15 +27,26 @@ const router = createBrowserRouter([
   { path: "/products/:productId", element: <ProductDetails /> },
   { path: "/cart", element: <Cart /> },
   { path: "/wishlist", element: <WishList /> },
-  {path:"/login",element:<Login/>}
+  { path: "/signup", element: <SignUp /> },
+  { path: "/profile", element: <Profile /> },
+  { path: "/login", element: <LoginForm /> },
+  { path: "/orders", element: <Orders /> },
 ]);
 
 root.render(
   <StrictMode>
-    <CartProvider>
-      <WishListProvider>
-        <RouterProvider router={router} />
-      </WishListProvider>
-    </CartProvider>
+    <UserProvider>
+      <CartProvider>
+        <WishListProvider>
+          <AddressProvider>
+            <SearchProvider>
+              <RecommendationProvider>
+              <RouterProvider router={router} />
+              </RecommendationProvider>
+            </SearchProvider>
+          </AddressProvider>
+        </WishListProvider>
+      </CartProvider>
+    </UserProvider>
   </StrictMode>
 );

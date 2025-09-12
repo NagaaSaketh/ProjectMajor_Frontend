@@ -1,28 +1,39 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useFetch from "../useFetch";
 import Header from "../components/Header";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useCartContext from "../contexts/CartContext";
 import useWishListContext from "../contexts/WishListContext";
-import "react-toastify/dist/ReactToastify.css";
-import { Slide, toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Slide } from "react-toastify";
+import { useState , useEffect } from "react";
+import useRecommendationContext from "../contexts/RecommendationContext";
 
 const ProductDetails = () => {
-  const {
-    handleAddToCart,
-    size,
-    setSize,
-    quantity,
-    increaseQuantity,
-    decreaseQuantity,
-  } = useCartContext();
+  const { handleAddToCart, size, setSize } = useCartContext();
   const { handleAddToWishList } = useWishListContext();
+  const {recommendationProducts,recommendations} = useRecommendationContext();
   const { productId } = useParams();
   const { data, loading, error } = useFetch(
     `https://major-project1-backend-ten.vercel.app/products/${productId}`
   );
+  const [quantity, setQuantity] = useState(1);
+  console.log(data);
+  
+
+  useEffect(() => {
+    if (data?.category && data?._id) {
+      recommendationProducts(data.category, data._id);
+    }
+  }, [data, productId]);
+
+  const handleDecreaseBtn = () => {
+    setQuantity((prevVal) => prevVal > 1 ? prevVal - 1 : 1);
+  };
+
+  const handleIncreaseBtn = () => {
+    setQuantity((prevVal) => prevVal + 1);
+  };
 
   const handleSizeSelection = (selectedSize) => {
     setSize(selectedSize);
@@ -78,7 +89,7 @@ const ProductDetails = () => {
                     Add to Cart
                   </button>
                   <button
-                    onClick={() => handleAddToWishList(data,size)}
+                    onClick={() => handleAddToWishList(data, size)}
                     style={{
                       borderRadius: "1%",
                       width: "100%",
@@ -134,7 +145,7 @@ const ProductDetails = () => {
                       <label className="fw-bold mb-2">Quantity:</label>
                       <div className="d-flex justify-content-center ">
                         <button
-                          onClick={decreaseQuantity}
+                          onClick={handleDecreaseBtn}
                           className="btn btn-outline-dark rounded-circle"
                         >
                           -
@@ -147,7 +158,7 @@ const ProductDetails = () => {
                           readOnly
                         />
                         <button
-                          onClick={increaseQuantity}
+                          onClick={handleIncreaseBtn}
                           className="btn btn-outline-dark rounded-circle"
                         >
                           +
@@ -304,9 +315,27 @@ const ProductDetails = () => {
               <hr />
               <div>
                 <div className="text-center">
-                  <h3 style={{ fontFamily: "CopperPlate" }}>
+                  <h2 style={{ fontFamily: "CopperPlate" }}>
                     You may be interested in
-                  </h3>
+                  </h2>
+                </div>
+                <div className="row">
+                  {recommendations && recommendations.length > 0 ? (
+                    recommendations.map((product)=>(
+                      <div key={product._id} className="col-md-3 mb-4 my-3">
+                        <Link to={`/products/${product._id}`}>
+                    <div className="card h-100">
+                      <img
+                        src={product.productImage}
+                        alt={product.productName}
+                        className="card-img"
+                        style={{ height: "250px", objectFit: "cover" }}
+                      />
+                    </div>
+                     </Link>
+                  </div>
+                    ))
+                  ) : <p>No Recommendations found.</p>  }
                 </div>
               </div>
             </div>

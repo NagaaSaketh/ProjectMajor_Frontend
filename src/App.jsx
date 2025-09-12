@@ -5,6 +5,7 @@ import Categories from "./components/Categories";
 
 
 function App() {
+  
   return (
     <>
       <Header />
