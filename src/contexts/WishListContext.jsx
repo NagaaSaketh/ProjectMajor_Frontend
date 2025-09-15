@@ -66,7 +66,7 @@ export const WishListProvider = ({ children }) => {
         actualPrice: productData.actualPrice,
       };
 
-      const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
+      const response = await fetch("https://project-major-frontend.vercel.app/wishlistItems", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,6 +85,8 @@ export const WishListProvider = ({ children }) => {
       console.log(err);
     }
   };
+
+
 
   const handleAddToWishListFromProductsListPage = async (productData) => {
     console.log(productData);
@@ -173,6 +175,7 @@ export const WishListProvider = ({ children }) => {
           quantity: 1,
           size: product.size,
         };
+
 
         const addResponse = await fetch(
           "https://major-project1-backend-ten.vercel.app/cart",

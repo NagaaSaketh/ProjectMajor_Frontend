@@ -8,9 +8,7 @@ const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const { user } = useUserContext();
-  // console.log(user);
 
-  
   const [cart, setCart] = useState([]);
   const [size, setSize] = useState("");
 
@@ -196,11 +194,11 @@ export const CartProvider = ({ children }) => {
         if (!addResponse.ok) {
           throw "Failed to add item into wishlist.";
         }
+        await deleteItem(product._id);
 
         toast.success("Item moved to wishlist successfully!");
       }
-
-      await deleteItem(product._id);
+      
     } catch (err) {
       console.log(err);
       toast.error("Failed to move item to wishlist.");
