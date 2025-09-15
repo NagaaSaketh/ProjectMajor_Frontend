@@ -17,6 +17,7 @@ import Orders from "./components/Orders.jsx";
 import { AddressProvider } from "./contexts/AddressesContext.jsx";
 import { SearchProvider } from "./contexts/SearchContext.jsx";
 import { RecommendationProvider } from "./contexts/RecommendationContext.jsx";
+import { SignUpProvider } from "./contexts/SignUpContext.jsx";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
 root.render(
   <StrictMode>
     <UserProvider>
+      <SignUpProvider>
       <CartProvider>
         <WishListProvider>
           <AddressProvider>
@@ -47,6 +49,7 @@ root.render(
           </AddressProvider>
         </WishListProvider>
       </CartProvider>
+      </SignUpProvider>
     </UserProvider>
   </StrictMode>
 );

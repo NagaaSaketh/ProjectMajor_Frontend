@@ -63,7 +63,9 @@ const ManageProfile = () => {
       console.log("Address added successfully!");
     } catch (error) {
       console.error("Failed to add address:", error);
-    } 
+    } finally {
+    setLoading(false);
+  }
   };
 
   const handleDelete = async (addr) => {
