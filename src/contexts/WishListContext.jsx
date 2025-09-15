@@ -8,11 +8,8 @@ const useWishListContext = () => useContext(WishListContext);
 
 export const WishListProvider = ({ children }) => {
   const { user } = useUserContext();
-  // console.log(user?._id);
 
   const [wishList, setWishList] = useState([]);
-
-  // console.log(wishList);
 
   useEffect(() => {
     if (!user) {
@@ -66,7 +63,7 @@ export const WishListProvider = ({ children }) => {
         actualPrice: productData.actualPrice,
       };
 
-      const response = await fetch("https://project-major-frontend.vercel.app/wishlistItems", {
+      const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,8 +82,6 @@ export const WishListProvider = ({ children }) => {
       console.log(err);
     }
   };
-
-
 
   const handleAddToWishListFromProductsListPage = async (productData) => {
     console.log(productData);
