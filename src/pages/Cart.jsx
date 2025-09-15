@@ -11,7 +11,7 @@ import { useState } from "react";
 const Cart = () => {
   const navigate = useNavigate();
   const [paymentMode, setPaymentMode] = useState("");
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
 
@@ -21,17 +21,20 @@ const Cart = () => {
     decreaseQuantity,
     deleteItem,
     handleMoveToWishListFromCart,
-    clearCart
+    clearCart,
   } = useCartContext();
 
   console.log(cart);
-  
+
   const { user } = useUserContext();
   const { addresses } = useAddressContext();
 
-  const totalPrice = cart?.reduce((acc, curr) => acc + curr.productPrice * curr.quantity, 0);
+  const totalPrice = cart?.reduce(
+    (acc, curr) => acc + curr.productPrice * curr.quantity,
+    0
+  );
   const totalActualPrice =
-    cart?.reduce((acc, curr) => acc + (curr.actualPrice * curr.quantity), 0) || 0;
+    cart?.reduce((acc, curr) => acc + curr.actualPrice * curr.quantity, 0) || 0;
   const totalDiscount = totalActualPrice - totalPrice;
 
   const handleProceedToCheckout = () => {
@@ -95,21 +98,25 @@ const Cart = () => {
         paymentMethod: paymentMode,
       };
 
-      const response = await fetch("https://major-project1-backend-ten.vercel.app/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        "https://major-project1-backend-ten.vercel.app/checkout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       const result = await response.json();
       console.log(result);
 
       if (response.ok && result) {
-
         await clearCart(user._id);
         toast.success("Order placed successfully!");
+        setSelectedAddress("");
+        setPaymentMode("");
         setTimeout(() => {
           navigate("/profile");
         }, 3000);
@@ -262,8 +269,7 @@ const Cart = () => {
                       className="fw-bold"
                       style={{ fontFamily: "TimesNewRoman" }}
                     >
-                      Discount: Rs.{" "}
-                      {totalDiscount ? totalDiscount: 0}{" "}
+                      Discount: Rs. {totalDiscount ? totalDiscount : 0}{" "}
                     </p>
                   </div>
                   <hr />
