@@ -40,17 +40,16 @@ export const WishListProvider = ({ children }) => {
     getWishListItems();
   }, [user?._id]);
 
-  const handleAddToWishList = async (productData, size) => {
+  const handleAddToWishList = async (productData) => {
     console.log(productData);
 
     if (!user) {
       toast.info("Please login to continue");
       return;
     }
-
     const existingProduct = wishList.find(
       (product) =>
-        product.productId === productData._id && product.size === size
+        product.productId === productData._id
     );
     if (existingProduct) {
       toast.info("Product already exists in your wishlist.");
@@ -65,7 +64,6 @@ export const WishListProvider = ({ children }) => {
         productImage: productData.productImage,
         productPrice: productData.productPrice,
         actualPrice: productData.actualPrice,
-        size: size,
       };
 
       const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
@@ -111,7 +109,6 @@ export const WishListProvider = ({ children }) => {
         productImage: productData.productImage,
         productPrice: productData.productPrice,
         actualPrice: productData.actualPrice,
-        size: "L",
       };
 
       const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {

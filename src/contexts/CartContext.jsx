@@ -8,7 +8,7 @@ const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const { user } = useUserContext();
-  console.log(user);
+  // console.log(user);
 
   
   const [cart, setCart] = useState([]);
@@ -155,6 +155,8 @@ export const CartProvider = ({ children }) => {
   };
 
   const handleMoveToWishListFromCart = async (product) => {
+    console.log(product);
+    
     try {
       const response = await fetch(
         "https://major-project1-backend-ten.vercel.app/wishlist/items/products"
@@ -170,6 +172,7 @@ export const CartProvider = ({ children }) => {
         toast.info("This Item is already in your wishlist.");
       } else {
         const wishListItem = {
+          userID:user._id,
           productId: product.productId,
           productName: product.productName,
           productImage: product.productImage,

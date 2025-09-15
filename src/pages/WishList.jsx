@@ -3,12 +3,26 @@ import useWishListContext from "../contexts/WishListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, Slide } from "react-toastify";
+import { useState } from "react";
 
 const WishList = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { wishList, handleMoveToCartFromWishList, removeFromWishlist } =
     useWishListContext();
 
-  // console.log(wishList);
+  const openSizeModal = (product) => {
+    setSelectedProduct(product);
+    setShowModal(true);
+  };
+  const handleSizeSelection = (size) => {
+    if (!selectedProduct) {
+      return;
+    }
+    const productWithSize = { ...selectedProduct, size };
+    handleMoveToCartFromWishList(productWithSize);
+    setSelectedProduct(null);
+  };
 
   return (
     <>
@@ -47,7 +61,7 @@ const WishList = () => {
                         <p className="fw-bold">Rs.{item.productPrice}</p>
                         <div className="d-flex justify-content-evenly">
                           <button
-                            onClick={() => handleMoveToCartFromWishList(item)}
+                            onClick={() => openSizeModal(item)}
                             style={{ fontFamily: "CopperPlate" }}
                             className="btn btn-outline-dark"
                           >
@@ -70,6 +84,46 @@ const WishList = () => {
             )}
           </div>
         </div>
+        {showModal && (
+          <>
+            <div className="modal-backdrop fade show"></div>
+            <div
+              className="modal fade show"
+              style={{ display: "block" }}
+              tabIndex="-1"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    Please select a size
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setShowModal(false)}
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body d-flex gap-2 flex-wrap justify-content-center">
+                    {["XS","S", "M", "L", "XL","XXL"].map((size) => (
+                      <button
+                        style={{fontFamily:"CopperPlate"}}
+                        key={size}
+                        type="button"
+                        className="btn btn-outline-primary"
+                        onClick={() => {
+                          handleSizeSelection(size);
+                          setShowModal(false);
+                        }}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
       <ToastContainer
         position="top-right"

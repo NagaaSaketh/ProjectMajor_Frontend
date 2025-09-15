@@ -55,7 +55,7 @@ export const AddressProvider = ({ children }) => {
 
     const updatedAddress = await response.json();
     toast.success("Address updated successfully!");
-    console.log(updatedAddress);
+    // console.log(updatedAddress);
     
 
     setAddress((prevVal) =>

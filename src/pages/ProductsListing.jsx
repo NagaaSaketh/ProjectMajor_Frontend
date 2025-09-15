@@ -308,13 +308,13 @@ const ProductsListing = () => {
                   {filteredProducts.map((obj) => (
                     <div
                       key={obj._id}
-                      className="col-xl-3 col-lg-4 col-md-6 col-sm-6"
+                      className="col-xl-3 col-lg-4 col-md-6 col-sm-6 mt-3"
                     >
                       <Link
                         to={`/products/${obj._id}`}
                         style={{ textDecoration: "none", color: "inherit" }}
                       >
-                        <div className="card my-2">
+                        <div className="card h-100">
                           <div className="position-relative">
                             <img
                               style={{
