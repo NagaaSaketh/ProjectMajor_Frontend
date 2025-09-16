@@ -195,8 +195,6 @@ export const CartProvider = ({ children }) => {
         if (!addResponse.ok) {
           throw "Failed to add item into wishlist.";
         }
-
-        const addedItem = await addResponse.json();
         await deleteItem(product._id);
 
         toast.success("Item moved to wishlist successfully!");
