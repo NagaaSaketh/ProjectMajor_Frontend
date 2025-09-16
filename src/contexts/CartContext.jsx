@@ -151,66 +151,6 @@ export const CartProvider = ({ children }) => {
       toast.error("Failed to update quantity");
     }
   };
-
-  const handleMoveToWishListFromCart = async (product) => {
-    console.log(product);
-    
-    try {
-      const response = await fetch(
-        "https://major-project1-backend-ten.vercel.app/wishlist/items/products"
-      );
-      const wishListData = await response.json();
-      const wishList = wishListData.wishlistItems || [];
-
-      const existingProduct = wishList.find(
-        (item) => item.productId === product._id
-      );
-
-      if (existingProduct) {
-        toast.info("This Item is already in your wishlist.");
-        return;
-      } else {
-        const wishListItem = {
-          userID:user._id,
-          productId: product.productId,
-          productName: product.productName,
-          productImage: product.productImage,
-          productPrice: product.productPrice,
-          actualPrice: product.actualPrice,
-          quantity: 1,
-          size: product.size,
-        };
-
-        const addResponse = await fetch(
-          "https://major-project1-backend-ten.vercel.app/wishlistItems",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(wishListItem),
-          }
-        );
-
-        if (!addResponse.ok) {
-          throw "Failed to add item into wishlist.";
-        }
-        await deleteItem(product._id);
-
-        toast.success("Item moved to wishlist successfully!");
-      }
-      
-    } catch (err) {
-      console.log(err);
-      toast.error("Failed to move item to wishlist.");
-    }
-  };
-
-  const addToCartFromWishlist = (newItem) => {
-    setCart((prevCart) => [...prevCart, newItem]);
-  };
-
-
   async function deleteItem(itemId) {
     try {
       // console.log("Deleting item with ID:", itemId);
@@ -231,7 +171,7 @@ export const CartProvider = ({ children }) => {
       const data = await response.json();
       console.log("Item Deleted:", data);
 
-      setCart((cart) => cart.filter((item) => item._id !== itemId));
+      setCart((prevCart) => prevCart.filter((item) => item._id !== itemId));
 
       toast.success("Item deleted successfully.");
     } catch (err) {
@@ -273,9 +213,8 @@ export const CartProvider = ({ children }) => {
         increaseQuantity,
         decreaseQuantity,
         deleteItem,
-        handleMoveToWishListFromCart,
         clearCart,
-        addToCartFromWishlist
+
       }}
     >
       {children}
@@ -283,4 +222,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export default useCartContext;
+export default useCartContext; 

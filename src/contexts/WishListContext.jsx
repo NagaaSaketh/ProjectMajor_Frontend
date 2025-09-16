@@ -133,74 +133,6 @@ export const WishListProvider = ({ children }) => {
     }
   };
 
-  const handleMoveToCartFromWishList = async (product) => {
-    // console.log(product);
-
-    try {
-      const response = await fetch(
-        "https://major-project1-backend-ten.vercel.app/cart/items"
-      );
-      const cartData = await response.json();
-      const cart = cartData.products || [];
-
-      const existingProduct = cart.find(
-        (item) => item.productId === product._id && item.size === product.size
-      );
-
-      if (existingProduct) {
-        const updatedQuantity = existingProduct.quantity + 1;
-        const updateResponse = await fetch(
-          `https://major-project1-backend-ten.vercel.app/cart/items/${existingProduct._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ quantity: updatedQuantity }),
-          }
-        );
-
-        if (!updateResponse.ok) {
-          throw "Failed to update item quantity in cart.";
-        }
-        toast.success("Item quantity updated in cart!");
-      } else {
-        const cartItem = {
-          userID: user._id,
-          productId: product.productId,
-          productName: product.productName,
-          productImage: product.productImage,
-          productPrice: product.productPrice,
-          actualPrice: product.actualPrice,
-          quantity: 1,
-          size: product.size,
-        };
-
-        const addResponse = await fetch(
-          "https://major-project1-backend-ten.vercel.app/cart",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(cartItem),
-          }
-        );
-
-        if (!addResponse.ok) {
-          throw "Failed to add item into cart.";
-        }
-
-        toast.success("Item moved to cart successfully!");
-      }
-
-      await removeFromWishlist(product._id);
-    } catch (err) {
-      console.log(err);
-      toast.error("Failed to move item to cart.");
-    }
-  };
-
   const removeFromWishlist = async (itemId) => {
     try {
       const response = await fetch(
@@ -216,7 +148,7 @@ export const WishListProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error("Failed to remove item from wishlist.");
       }
-      setWishList((wishList) => wishList.filter((item) => item._id !== itemId));
+      setWishList((prevWishList) => prevWishList.filter((item) => item._id !== itemId));
       toast.success("Item removed from wishlist successfully!");
     } catch (err) {
       console.log(err);
@@ -231,7 +163,6 @@ export const WishListProvider = ({ children }) => {
         handleAddToWishList,
         wishList,
         setWishList,
-        handleMoveToCartFromWishList,
         handleAddToWishListFromProductsListPage,
         removeFromWishlist,
         addToWishListFromCart
@@ -243,3 +174,6 @@ export const WishListProvider = ({ children }) => {
 };
 
 export default useWishListContext;
+
+
+

@@ -7,6 +7,7 @@ import useAddressContext from "../contexts/AddressesContext";
 import { toast, ToastContainer, Slide } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import useWishListContext from "../contexts/WishListContext";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -17,17 +18,28 @@ const Cart = () => {
 
   const {
     cart,
+    setCart,
     increaseQuantity,
     decreaseQuantity,
     deleteItem,
-    handleMoveToWishListFromCart,
     clearCart,
   } = useCartContext();
 
-  console.log(cart);
-
+  const {handleAddToWishList} = useWishListContext();
   const { user } = useUserContext();
   const { addresses } = useAddressContext();
+
+  const moveToWishList = async(item)=>{
+    try{  
+      await handleAddToWishList(item);
+      await deleteItem(item._id);
+
+      setCart((prevCart)=>prevCart.filter((product)=>product._id!==item._id))
+    }catch(err){
+      console.log(err);
+      toast.error("Failed to move item to wishlist.")
+    }
+  }
 
   const totalPrice = cart?.reduce(
     (acc, curr) => acc + curr.productPrice * curr.quantity,
@@ -210,7 +222,7 @@ const Cart = () => {
                             <div className="d-flex gap-3 mt-4">
                               <button
                                 onClick={() =>
-                                  handleMoveToWishListFromCart(item)
+                                  moveToWishList(item)
                                 }
                                 style={{ fontFamily: "CopperPlate" }}
                                 className="btn btn-outline-dark"

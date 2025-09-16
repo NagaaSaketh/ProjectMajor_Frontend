@@ -2,14 +2,35 @@ import Header from "../components/Header";
 import useWishListContext from "../contexts/WishListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { ToastContainer, Slide } from "react-toastify";
+import { ToastContainer, Slide, toast } from "react-toastify";
 import { useState } from "react";
+import useCartContext from "../contexts/CartContext";
 
 const WishList = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const { wishList, handleMoveToCartFromWishList, removeFromWishlist } =
-    useWishListContext();
+  const {
+    wishList,
+    setWishList,
+    handleMoveToCartFromWishList,
+    removeFromWishlist,
+  } = useWishListContext();
+
+  const { handleAddToCart } = useCartContext();
+
+  const moveToCart = async (product, size) => {
+    try {
+      await handleAddToCart(product, 1, size);
+      await removeFromWishlist(product._id);
+
+      setWishList((prevWishList) =>
+        prevWishList.filter((item) => item._id !== product._id)
+      );
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to move item to cart.")
+    }
+  };
 
   const openSizeModal = (product) => {
     setSelectedProduct(product);
@@ -19,9 +40,9 @@ const WishList = () => {
     if (!selectedProduct) {
       return;
     }
-    const productWithSize = { ...selectedProduct, size };
-    handleMoveToCartFromWishList(productWithSize);
+    moveToCart(selectedProduct, size);
     setSelectedProduct(null);
+    setShowModal(false);
   };
 
   return (
@@ -104,9 +125,9 @@ const WishList = () => {
                     ></button>
                   </div>
                   <div className="modal-body d-flex gap-2 flex-wrap justify-content-center">
-                    {["XS","S", "M", "L", "XL","XXL"].map((size) => (
+                    {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
                       <button
-                        style={{fontFamily:"CopperPlate"}}
+                        style={{ fontFamily: "CopperPlate" }}
                         key={size}
                         type="button"
                         className="btn btn-outline-primary"
