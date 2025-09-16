@@ -168,6 +168,7 @@ export const CartProvider = ({ children }) => {
 
       if (existingProduct) {
         toast.info("This Item is already in your wishlist.");
+        return;
       } else {
         const wishListItem = {
           userID:user._id,
@@ -194,6 +195,8 @@ export const CartProvider = ({ children }) => {
         if (!addResponse.ok) {
           throw "Failed to add item into wishlist.";
         }
+
+        const addedItem = await addResponse.json();
         await deleteItem(product._id);
 
         toast.success("Item moved to wishlist successfully!");
@@ -204,6 +207,11 @@ export const CartProvider = ({ children }) => {
       toast.error("Failed to move item to wishlist.");
     }
   };
+
+  const addToCartFromWishlist = (newItem) => {
+    setCart((prevCart) => [...prevCart, newItem]);
+  };
+
 
   async function deleteItem(itemId) {
     try {
@@ -269,6 +277,7 @@ export const CartProvider = ({ children }) => {
         deleteItem,
         handleMoveToWishListFromCart,
         clearCart,
+        addToCartFromWishlist
       }}
     >
       {children}

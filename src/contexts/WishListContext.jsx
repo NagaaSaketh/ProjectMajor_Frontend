@@ -45,8 +45,7 @@ export const WishListProvider = ({ children }) => {
       return;
     }
     const existingProduct = wishList.find(
-      (product) =>
-        product.productId === productData._id
+      (product) => product.productId === productData._id
     );
     if (existingProduct) {
       toast.info("Product already exists in your wishlist.");
@@ -63,13 +62,16 @@ export const WishListProvider = ({ children }) => {
         actualPrice: productData.actualPrice,
       };
 
-      const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(wishListItem),
-      });
+      const response = await fetch(
+        "https://major-project1-backend-ten.vercel.app/wishlistItems",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(wishListItem),
+        }
+      );
       if (!response.ok) {
         throw "Failed to add item into wishlist.";
       }
@@ -108,13 +110,16 @@ export const WishListProvider = ({ children }) => {
         actualPrice: productData.actualPrice,
       };
 
-      const response = await fetch("https://major-project1-backend-ten.vercel.app/wishlistItems", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(wishListItem),
-      });
+      const response = await fetch(
+        "https://major-project1-backend-ten.vercel.app/wishlistItems",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(wishListItem),
+        }
+      );
       if (!response.ok) {
         throw "Failed to add item into wishlist.";
       }
@@ -171,7 +176,6 @@ export const WishListProvider = ({ children }) => {
           size: product.size,
         };
 
-
         const addResponse = await fetch(
           "https://major-project1-backend-ten.vercel.app/cart",
           {
@@ -212,13 +216,15 @@ export const WishListProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error("Failed to remove item from wishlist.");
       }
-      toast.success("Item removed from wishlist successfully!");
       setWishList((wishList) => wishList.filter((item) => item._id !== itemId));
+      toast.success("Item removed from wishlist successfully!");
     } catch (err) {
       console.log(err);
     }
   };
-
+  const addToWishListFromCart = (newItem) => {
+    setWishList((prevWishList) => [...prevWishList, newItem]);
+  };
   return (
     <WishListContext.Provider
       value={{
@@ -228,6 +234,7 @@ export const WishListProvider = ({ children }) => {
         handleMoveToCartFromWishList,
         handleAddToWishListFromProductsListPage,
         removeFromWishlist,
+        addToWishListFromCart
       }}
     >
       {children}
