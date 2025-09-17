@@ -25,21 +25,32 @@ const Cart = () => {
     clearCart,
   } = useCartContext();
 
-  const {handleAddToWishList} = useWishListContext();
+  console.log(cart);
+
+  const { handleAddToWishList } = useWishListContext();
   const { user } = useUserContext();
   const { addresses } = useAddressContext();
 
-  const moveToWishList = async(item)=>{
-    try{  
-      await handleAddToWishList(item);
-      await deleteItem(item._id);
+  const moveToWishList = async (cartItem) => {
+    try {
+      const productForWishList = {
+        _id: cartItem.productId, 
+        productName: cartItem.productName,
+        productImage: cartItem.productImage,
+        productPrice: cartItem.productPrice,
+        actualPrice: cartItem.actualPrice,
+      };
+      await handleAddToWishList(productForWishList);
+      await deleteItem(cartItem._id);
 
-      setCart((prevCart)=>prevCart.filter((product)=>product._id!==item._id))
-    }catch(err){
+      setCart((prevCart) =>
+        prevCart.filter((product) => product._id !== cartItem._id)
+      );
+    } catch (err) {
       console.log(err);
-      toast.error("Failed to move item to wishlist.")
+      toast.error("Failed to move item to wishlist.");
     }
-  }
+  };
 
   const totalPrice = cart?.reduce(
     (acc, curr) => acc + curr.productPrice * curr.quantity,
@@ -221,9 +232,7 @@ const Cart = () => {
 
                             <div className="d-flex gap-3 mt-4">
                               <button
-                                onClick={() =>
-                                  moveToWishList(item)
-                                }
+                                onClick={() => moveToWishList(item)}
                                 style={{ fontFamily: "CopperPlate" }}
                                 className="btn btn-outline-dark"
                               >

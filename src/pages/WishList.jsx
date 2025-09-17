@@ -8,27 +8,33 @@ import useCartContext from "../contexts/CartContext";
 
 const WishList = () => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const {
-    wishList,
-    setWishList,
-    handleMoveToCartFromWishList,
-    removeFromWishlist,
-  } = useWishListContext();
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const { wishList, setWishList, removeFromWishlist } = useWishListContext();
+
+  console.log(wishList);
 
   const { handleAddToCart } = useCartContext();
 
-  const moveToCart = async (product, size) => {
+  const moveToCart = async (wishlistItem, size) => {
     try {
-      await handleAddToCart(product, 1, size);
-      await removeFromWishlist(product._id);
-
+      await handleAddToCart(
+        {
+          _id: wishlistItem.productId,
+          productName: wishlistItem.productName,
+          productImage: wishlistItem.productImage,
+          productPrice: wishlistItem.productPrice,
+          actualPrice: wishlistItem.actualPrice,
+        },
+        1,
+        size
+      );
+      await removeFromWishlist(wishlistItem._id);
       setWishList((prevWishList) =>
-        prevWishList.filter((item) => item._id !== product._id)
+        prevWishList.filter((item) => item._id !== wishlistItem._id)
       );
     } catch (err) {
       console.log(err);
-      toast.error("Failed to move item to cart.")
+      toast.error("Failed to move item to cart.");
     }
   };
 
@@ -41,7 +47,7 @@ const WishList = () => {
       return;
     }
     moveToCart(selectedProduct, size);
-    setSelectedProduct(null);
+    setSelectedProduct("");
     setShowModal(false);
   };
 

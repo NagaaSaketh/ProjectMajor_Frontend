@@ -20,7 +20,9 @@ export const CartProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await fetch(`https://major-project1-backend-ten.vercel.app/cart/${user._id}`);
+        const res = await fetch(
+          `https://major-project1-backend-ten.vercel.app/cart/${user._id}`
+        );
         const jsonData = await res.json();
         if (jsonData) {
           setCart(Array.isArray(jsonData) ? jsonData : jsonData.products || []);
@@ -45,10 +47,10 @@ export const CartProvider = ({ children }) => {
         (product) =>
           product.productId === productData._id && product.size === size
       );
-      console.log(existingProduct);
+      // console.log(existingProduct);
 
       if (existingProduct) {
-        increaseQuantity(existingProduct._id);
+        await increaseQuantity(existingProduct._id);
         toast.success("Item quantity updated in cart!");
       } else {
         const cartItem = {
@@ -62,13 +64,16 @@ export const CartProvider = ({ children }) => {
           size: size,
         };
 
-        const response = await fetch("https://major-project1-backend-ten.vercel.app/cart", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(cartItem),
-        });
+        const response = await fetch(
+          "https://major-project1-backend-ten.vercel.app/cart",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cartItem),
+          }
+        );
         if (!response.ok) {
           throw "Failed to add item into cart.";
         }
@@ -214,7 +219,6 @@ export const CartProvider = ({ children }) => {
         decreaseQuantity,
         deleteItem,
         clearCart,
-
       }}
     >
       {children}
@@ -222,4 +226,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export default useCartContext; 
+export default useCartContext;
