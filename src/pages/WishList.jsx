@@ -68,9 +68,9 @@ const WishList = () => {
                 return (
                   <div
                     key={item._id}
-                    className="col-12 col-sm-6 col-md-4 col-lg-3"
+                    className="col-12 col-sm-6 col-md-4 col-lg-3 my-3"
                   >
-                    <div className="card mb-3">
+                    <div className="card h-100">
                       <div className="position-relative">
                         <img
                           style={{

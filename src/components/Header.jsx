@@ -123,22 +123,35 @@ const Header = () => {
                     <span className="fw-medium text-secondary ms-1 d-none d-lg-inline">Cart</span>
                   </div>
                 </Link>
+                
                 <Link
                   to="/profile"
+                  className="d-flex align-items-center justify-content-center rounded-circle border border-secondary text-decoration-none"
                   style={{
-                    borderRadius: "50%",
-                    width: "38px",
-                    height: "38px",
-                    padding: "0px",
+                    width: "40px",
+                    height: "40px",
+                    backgroundColor: "transparent"
                   }}
-                  className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+                  title="Profile"
                 >
-                  <FontAwesomeIcon style={{ fontSize: "16px" }} icon={faUser} />
+                  <FontAwesomeIcon 
+                    icon={faUser} 
+                    style={{ 
+                      fontSize: "16px",
+                      color: "inherit"
+                    }} 
+                  />
                 </Link>
+
                 {user && (
                   <button
                     onClick={handleLogOut}
-                    className="btn btn-outline-secondary inline-block"
+                    className="btn btn-outline-secondary"
+                    style={{
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "500"
+                    }}
                   >
                     Logout
                   </button>
