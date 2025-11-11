@@ -50,7 +50,7 @@ Watch a walkthrough (5–7 minutes) of all major features of this app: [Video Li
 
 **User Profile Page**
 - Address management
-- Naviage through "Profile" & "Orders"
+- Navigate through "Profile" & "Orders"
 
 **Categories Page or Product Listing Page**
 - Display list of products of each category
